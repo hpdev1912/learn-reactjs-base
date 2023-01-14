@@ -1,25 +1,12 @@
-import productApi from 'api/productApi';
 import Header from 'components/Header';
 import AlbumFeature from 'features/Album';
 import CounterFeature from 'features/Counter';
 import ProductFeature from 'features/Product';
 import TodoFeature from 'features/Todo';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 function App() {
-  useEffect(() => {
-    const getProductData = async () => {
-      const params = {
-        _limit: 10,
-      };
-      const dataPost = await productApi.getAll(params);
-
-      return dataPost;
-    };
-
-    getProductData();
-  }, []);
   return (
     <div className="app">
       <Header />
