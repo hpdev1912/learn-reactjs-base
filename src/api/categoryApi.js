@@ -9,7 +9,7 @@ const categoryApi = {
   },
 
   get(id) {
-    const url = `/categories/:${id}`;
+    const url = `/categories/${id}`;
     return axiosClient.get(url);
   },
 
@@ -19,12 +19,12 @@ const categoryApi = {
   },
 
   update(data) {
-    const url = `/categories/:${data.id}`;
+    const url = `/categories/${data.id}`;
     return axiosClient.patch(url, data);
   },
 
   remove(id) {
-    const url = `/categories/:${id}`;
+    const url = `/categories/${id}`;
     return axiosClient.delete(url);
   },
 };

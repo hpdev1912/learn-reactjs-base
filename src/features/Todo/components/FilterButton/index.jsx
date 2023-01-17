@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 const FilterButton = ({ buttonName, handleFilterClick }) => {
   const handleButtonClick = (buttonName) => {
-    console.log('aassa');
     if (!handleFilterClick) return;
 
     handleFilterClick(buttonName);

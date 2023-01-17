@@ -1,6 +1,6 @@
-import React from 'react';
+import { Tab, Tabs } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Paper, Tab, Tabs } from '@material-ui/core';
+import React from 'react';
 
 function ProductSort({ currentSort, onChange }) {
   const handleSortChange = (event, newValue) => {

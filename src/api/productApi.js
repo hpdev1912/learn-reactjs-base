@@ -25,7 +25,7 @@ const productApi = {
   },
 
   get(id) {
-    const url = `/products/:${id}`;
+    const url = `/products/${id}`;
     return axiosClient.get(url);
   },
 
@@ -35,12 +35,12 @@ const productApi = {
   },
 
   update(data) {
-    const url = `/products/:${data.id}`;
+    const url = `/products/${data.id}`;
     return axiosClient.patch(url, data);
   },
 
   remove(id) {
-    const url = `/products/:${id}`;
+    const url = `/products/${id}`;
     return axiosClient.delete(url);
   },
 };
