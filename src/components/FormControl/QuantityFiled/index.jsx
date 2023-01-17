@@ -39,6 +39,7 @@ function QuantityField(props) {
               id={name}
               type="number"
               disabled={disabled}
+              inputProps={{ min: 0, max: 15 }}
               value={value}
               onChange={onChange}
               onBlur={onBlur}
