@@ -38,6 +38,7 @@ function QuantityField(props) {
             <OutlinedInput
               id={name}
               type="number"
+              readOnly
               disabled={disabled}
               inputProps={{ min: 0, max: 15 }}
               value={value}

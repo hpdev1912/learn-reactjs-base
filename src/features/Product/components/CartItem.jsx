@@ -8,9 +8,14 @@ import { useForm, useWatch } from 'react-hook-form';
 import { formatPrice } from 'utils';
 import * as yup from 'yup';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useDispatch } from 'react-redux';
 import { checkout, removeFromCart, setQuantity } from 'features/Cart/cartSlice';
+import { useDispatch } from 'react-redux';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -37,6 +42,7 @@ function CartItem({ product = {}, cartTotalChange = null }) {
     return product.quantity * product.product.salePrice;
   });
   const [checked, setChecked] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -66,44 +72,74 @@ function CartItem({ product = {}, cartTotalChange = null }) {
   const quantityFieldValue = useWatch({ control, name: 'quantity' });
 
   useEffect(() => {
-    setValue('quantity', quantityFieldValue);
-    setItemTotalPrice(quantityFieldValue * product.product.salePrice);
-    dispatch(setQuantity({ id: product.id, quantity: quantityFieldValue }));
+    if (quantityFieldValue === 0) {
+      setOpen(true);
+    } else {
+      setValue('quantity', quantityFieldValue);
+      setItemTotalPrice(quantityFieldValue * product.product.salePrice);
+      dispatch(setQuantity({ id: product.id, quantity: quantityFieldValue }));
+    }
   }, [setValue, setItemTotalPrice, quantityFieldValue, product.product.salePrice, dispatch, product.id]);
 
   const handleRemoveCartItem = () => {
     dispatch(removeFromCart(product.id));
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Box padding={1} className={classes.root}>
-      <Checkbox
-        checked={checked}
-        color="primary"
-        inputProps={{ 'aria-label': 'secondary checkbox' }}
-        onChange={handleChange}
-      />
-      <Box padding={1} maxWidth="100px">
-        <img src={thumbnailUrl} alt={product.product.name} width="100%" />
-      </Box>
-      <Box className={classes.boxInfo}>
-        <Typography variant="body2">{product.product.name}</Typography>
+    <>
+      <Box padding={1} className={classes.root}>
+        <Checkbox
+          checked={checked}
+          color="primary"
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
+          onChange={handleChange}
+        />
+        <Box padding={1} maxWidth="100px">
+          <img src={thumbnailUrl} alt={product.product.name} width="100%" />
+        </Box>
+        <Box className={classes.boxInfo}>
+          <Typography variant="body2">{product.product.name}</Typography>
 
-        <Typography variant="body2">
-          <Box component="span" fontSize="16px" fontWeight="bold" mr={1}>
-            {formatPrice(product.product.salePrice)}
-          </Box>
-        </Typography>
-        <QuantityField name="quantity" form={form} register={register} watch={watch} control={control} />
-        <Button onClick={handleRemoveCartItem}>
-          <DeleteIcon />
-        </Button>
+          <Typography variant="body2">
+            <Box component="span" fontSize="16px" fontWeight="bold" mr={1}>
+              {formatPrice(product.product.salePrice)}
+            </Box>
+          </Typography>
+          <QuantityField name="quantity" form={form} register={register} watch={watch} control={control} />
+          <Button onClick={handleRemoveCartItem}>
+            <DeleteIcon />
+          </Button>
 
-        <Typography variant="body2" className={classes.tempPrice}>
-          {formatPrice(itemTotalPrice)}
-        </Typography>
+          <Typography variant="body2" className={classes.tempPrice}>
+            {formatPrice(itemTotalPrice)}
+          </Typography>
+        </Box>
       </Box>
-    </Box>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn có chắc muốn xóa sản phẩm này không zạ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Không
+          </Button>
+          <Button onClick={handleRemoveCartItem} color="primary" autoFocus>
+            Có
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
