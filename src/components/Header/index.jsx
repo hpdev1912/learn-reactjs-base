@@ -7,15 +7,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { AccountCircle, Close, ShoppingCart } from '@material-ui/icons';
+import { AccountCircle, CheckCircle, Close, ShoppingCart } from '@material-ui/icons';
 import CodeIcon from '@material-ui/icons/Code';
 import Login from 'features/Auth/components/Login';
 import Register from 'features/Auth/components/Register';
 import { logout } from 'features/Auth/userSlice';
-import { cartItemCountSelector } from 'features/Cart/selectors';
+import { cartItemCountSelector, showMiniCartSelector } from 'features/Cart/selectors';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useHistory } from 'react-router-dom';
+import CloseIcon from '@material-ui/icons/Close';
+import { hideMiniCart } from 'features/Cart/cartSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +47,13 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: theme.spacing(6),
   },
+  cartIcon: {
+    position: 'relative',
+  },
+  cartMenu: {
+    position: 'absolute',
+    top: '60px',
+  },
 }));
 
 const MODE = {
@@ -59,10 +68,13 @@ export default function Header() {
   const dispatch = useDispatch();
   const history = useHistory();
   const [open, setOpen] = useState(false);
+
   const [mode, setMode] = useState(MODE.LOGIN);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorMiniCartEl, setAnchorMiniCartEl] = useState(null);
 
   const cartItemCount = useSelector(cartItemCountSelector);
+  const isShowMiniCart = useSelector(showMiniCartSelector);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,6 +85,11 @@ export default function Header() {
       // Set 'open' to false, however you would do that with your particular code.
       setOpen(false);
     }
+  };
+
+  const handleCloseMiniCart = (e) => {
+    e.stopPropagation();
+    dispatch(hideMiniCart());
   };
 
   const handleMenuClick = (event) => {
@@ -88,8 +105,9 @@ export default function Header() {
     dispatch(action);
   };
 
-  const handleCartClick = () => {
+  const handleCartClick = (e) => {
     history.push('/carts');
+    dispatch(hideMiniCart());
   };
 
   const classes = useStyles();
@@ -124,9 +142,39 @@ export default function Header() {
             </IconButton>
           )}
 
-          <IconButton aria-label="show 4 new mails" color="inherit" onClick={handleCartClick}>
+          <IconButton
+            className={classes.cartIcon}
+            aria-label="show 4 new mails"
+            color="inherit"
+            onClick={handleCartClick}
+          >
             <Badge overlap="rectangular" badgeContent={cartItemCount} color="secondary">
               <ShoppingCart />
+              <Menu
+                className={classes.cartMenu}
+                id="simple-menu"
+                anchorEl={anchorMiniCartEl}
+                keepMounted
+                open={Boolean(isShowMiniCart)}
+                onClose={handleCloseMiniCart}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                getContentAnchorEl={null}
+              >
+                <MenuItem onClick={(e) => e.stopPropagation()}>
+                  <CheckCircle />
+                  <Typography>Thêm sản phầm vào giỏ hàng thành công</Typography>
+                  <Button onClick={handleCloseMiniCart}>
+                    <CloseIcon />
+                  </Button>
+                </MenuItem>
+
+                <MenuItem onClick={handleCartClick}>
+                  <Button>Xem giỏ hàng và thanh toán</Button>
+                </MenuItem>
+              </Menu>
             </Badge>
           </IconButton>
         </Toolbar>

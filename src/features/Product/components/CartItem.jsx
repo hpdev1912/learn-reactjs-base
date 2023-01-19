@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CartItem({ product = {}, cartTotalChange = null }) {
+function CartItem({ product = {} }) {
   const classes = useStyles();
   const thumbnailUrl = product.product.thumbnail
     ? `${STATIC_HOST}${product.product.thumbnail.url}`
@@ -42,7 +42,7 @@ function CartItem({ product = {}, cartTotalChange = null }) {
     return product.quantity * product.product.salePrice;
   });
   const [checked, setChecked] = useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
 

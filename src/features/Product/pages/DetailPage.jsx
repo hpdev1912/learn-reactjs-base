@@ -1,5 +1,5 @@
 import { Box, Container, Grid, LinearProgress, makeStyles, Paper } from '@material-ui/core';
-import { addToCart } from 'features/Cart/cartSlice';
+import { addToCart, showMiniCart } from 'features/Cart/cartSlice';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
@@ -52,6 +52,7 @@ function DetailPage() {
     });
 
     dispatch(action);
+    dispatch(showMiniCart());
   };
 
   if (loading) {
