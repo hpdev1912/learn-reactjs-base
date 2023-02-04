@@ -1,7 +1,6 @@
 import Header from 'components/Header';
 import AlbumFeature from 'features/Album';
 import CartFeature from 'features/Cart';
-import CounterFeature from 'features/Counter';
 import ProductFeature from 'features/Product';
 import TodoFeature from 'features/Todo';
 import React from 'react';
@@ -13,7 +12,7 @@ function App() {
       <Header />
 
       <Switch>
-        <Route path="/" component={CounterFeature} exact></Route>
+        <Route path="/" component={ProductFeature} exact></Route>
         <Route path="/todos" component={TodoFeature}></Route>
         <Route path="/albums" component={AlbumFeature}></Route>
         <Route path="/products" component={ProductFeature}></Route>

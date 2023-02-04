@@ -86,6 +86,7 @@ function CartItem({ product = {} }) {
   };
 
   const handleClose = () => {
+    setValue('quantity', 1);
     setOpen(false);
   };
 
@@ -126,9 +127,7 @@ function CartItem({ product = {} }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bạn có chắc muốn xóa sản phẩm này không zạ?
-          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">Bạn có chắc muốn xóa sản phẩm này không?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
